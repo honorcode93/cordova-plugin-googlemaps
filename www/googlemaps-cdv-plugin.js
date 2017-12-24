@@ -394,7 +394,7 @@ if (!cordova) {
       bodyRect.bottom = bodyRect.top + bodyRect.heihgt;
 
       common._clearInternalCache();
-      traceDomTree(document.body, 0, bodyRect, 0, 0, 0);
+      traceDomTree(document.body, 0, "root", bodyRect, 0, 0, 0);
 
       // If some elements has been removed, should update the positions
       var elementCnt = Object.keys(domPositions).length;
@@ -491,11 +491,11 @@ if (!cordova) {
       // Ignore the elements that their z-index is smaller than map div
       //-----------------------------------------------------------------
       var finalDomPositions;
-      if (touchableMapList.length === 0) {
+      //if (touchableMapList.length === 0) {
         finalDomPositions = domPositions;
-      } else {
-        finalDomPositions = common.quickfilter(domPositions, mapElemIDs);
-      }
+      //} else {
+      //  finalDomPositions = common.quickfilter(domPositions, mapElemIDs);
+      //}
       var prevKeys = Object.keys(prevFinal);
       var currentKeys = Object.keys(finalDomPositions);
       if (prevKeys.length === currentKeys.length) {
@@ -560,7 +560,7 @@ if (!cordova) {
       children = null;
     }
 
-    function traceDomTree(element, domIdx, parentRect, parentZIndex, parentDepth, zIndexSolt) {
+    function traceDomTree(element, domIdx, parentId, parentRect, parentZIndex, parentDepth, zIndexSolt) {
       var zIndex = parentZIndex;
       doNotTrace = false;
       var depth = 1;
@@ -607,7 +607,7 @@ if (!cordova) {
           size: rect,
           depth: depth,
           zIndex: zIndex,
-          ignore: element.className.indexOf("_gmaps_cdv_") !== -1
+          parentId:
         };
         parentRect = rect;
         parentRect.elemId = elemId;
@@ -680,7 +680,8 @@ if (!cordova) {
               common.getStyle(child, "display") === "none") {
               continue;
             }
-            traceDomTree(child, domIdx + i + 1, parentRect, zIndex, depth, zIndexSolt);
+            domPositions[elemId].children
+            traceDomTree(child, domIdx + i + 1, elemId, parentRect, zIndex, depth, zIndexSolt);
           }
         }
       }
